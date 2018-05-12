@@ -16,6 +16,7 @@ namespace fp
 	public:
 		virtual std::string str() = 0;
 		virtual double value(double x) = 0;
+		virtual base_function_ptr derivative() = 0;
 	};
 
 	class independent_variable :public base_function
@@ -26,6 +27,7 @@ namespace fp
 		independent_variable(std::string);
 		std::string str();
 		double value(double x);
+		base_function_ptr derivative();
 	};
 
 	class constant_function :public base_function
@@ -36,6 +38,7 @@ namespace fp
 		constant_function(double ac);
 		std::string str();
 		double value(double x);
+		base_function_ptr derivative();
 	};
 
 	class add_function :public base_function
@@ -47,6 +50,7 @@ namespace fp
 		add_function(base_function_ptr lhs, base_function_ptr rhs);
 		std::string str();
 		double value(double x);
+		base_function_ptr derivative();
 	};
 
 	class minus_function :public base_function
@@ -58,6 +62,7 @@ namespace fp
 		minus_function(base_function_ptr lhs, base_function_ptr rhs);
 		std::string str();
 		double value(double x);
+		base_function_ptr derivative();
 	};
 
 	class multiply_function :public base_function
@@ -69,6 +74,7 @@ namespace fp
 		multiply_function(base_function_ptr lhs, base_function_ptr rhs);
 		std::string str();
 		double value(double x);
+		base_function_ptr derivative();
 	};
 
 	class divide_function :public base_function
@@ -80,6 +86,7 @@ namespace fp
 		divide_function(base_function_ptr lhs, base_function_ptr rhs);
 		std::string str();
 		double value(double x);
+		base_function_ptr derivative();
 	};
 
 	class power_function :public base_function
@@ -91,6 +98,18 @@ namespace fp
 		power_function(base_function_ptr lhs, base_function_ptr rhs);
 		std::string str();
 		double value(double x);
+		base_function_ptr derivative();
+	};
+
+	class ln_function :public base_function
+	{
+	private:
+		base_function_ptr m_arg;
+	public:
+		ln_function(base_function_ptr arg);
+		std::string str();
+		double value(double x);
+		base_function_ptr derivative();
 	};
 }
 
