@@ -4,10 +4,13 @@
 
 #include <string>
 #include <memory>
+#include <algorithm>
+#include <vector>
 namespace fp
 {
 	class base_function;
 	using base_function_ptr = std::shared_ptr<base_function>;
+	base_function_ptr function_parse(std::string func_str);
 	class base_function
 	{
 	public:
