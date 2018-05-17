@@ -2,12 +2,25 @@
 #include <iostream>
 int main()
 {
-	auto f = fp::function_parse("(x + 3) ^ 2 + x + 1");
-	std::cout << "f(x)=" << f->str() << std::endl;
-	std::cout << "f(3)=" << f->value(3) << std::endl;
-	auto fd = f->derivative();
-	std::cout << "f'(x)=" << fd->str() << std::endl;
-	std::cout << "f'(3)=" << fd->value(3) << std::endl;
+	std::string str;
+	std::cout << "input f(x)= ";
+	std::cin >> str;
+	try
+	{
+		auto f = fp::function_parse(str);
+		auto fd = f->derivative();
+		std::cout << "f(x)=" << f->str() << std::endl;
+		std::cout << "f'(x)=" << fd->str() << std::endl;
+		double x;
+		std::cout << "input x= ";
+		std::cin >> x;
+		std::cout << "f(" << x << ")=" << f->value(x) << std::endl;
+		std::cout << "f'(" << x << ")=" << fd->value(x) << std::endl;
+	}
+	catch (std::exception& e)
+	{
+		std::cout << "fail to parse:" << e.what();
+	}
 	system("pause");
 	return 0;
 }

@@ -111,6 +111,30 @@ namespace fp
 		double value(double x);
 		base_function_ptr derivative();
 	};
+
+	class sin_function :public base_function
+	{
+	private:
+		base_function_ptr m_arg;
+	public:
+		sin_function(base_function_ptr arg);
+		std::string str();
+		double value(double x);
+		base_function_ptr derivative();
+	};
+
+	class cos_function :public base_function
+	{
+	private:
+		base_function_ptr m_arg;
+	public:
+		cos_function(base_function_ptr arg);
+		std::string str();
+		double value(double x);
+		base_function_ptr derivative();
+	};
+
+
 }
 
 #endif
