@@ -1,4 +1,3 @@
-#pragma once
 #ifndef _FP_H_
 #define _FP_H_
 
@@ -6,11 +5,14 @@
 #include <memory>
 #include <algorithm>
 #include <vector>
+
 namespace fp
 {
 	class base_function;
 	using base_function_ptr = std::shared_ptr<base_function>;
+
 	base_function_ptr function_parse(std::string func_str);
+
 	class base_function
 	{
 	public:
@@ -22,116 +24,116 @@ namespace fp
 	class independent_variable :public base_function
 	{
 	private:
-		std::string m_iv;
+		std::string _iv;
 	public:
-		independent_variable(std::string);
-		std::string str();
-		double value(double x);
-		base_function_ptr derivative();
+		independent_variable(std::string iv);
+		std::string str() override;
+		double value(double x) override;
+		base_function_ptr derivative() override;
 	};
 
 	class constant_function :public base_function
 	{
 	private:
-		double c;
+		double _c;
 	public:
-		constant_function(double ac);
-		std::string str();
-		double value(double x);
-		base_function_ptr derivative();
+		constant_function(double c);
+		std::string str() override;
+		double value(double x) override;
+		base_function_ptr derivative() override;
 	};
 
 	class add_function :public base_function
 	{
 	private:
-		base_function_ptr m_lhs;
-		base_function_ptr m_rhs;
+		base_function_ptr _lhs;
+		base_function_ptr _rhs;
 	public:
 		add_function(base_function_ptr lhs, base_function_ptr rhs);
-		std::string str();
-		double value(double x);
-		base_function_ptr derivative();
+		std::string str() override;
+		double value(double x) override;
+		base_function_ptr derivative() override;
 	};
 
 	class minus_function :public base_function
 	{
 	private:
-		base_function_ptr m_lhs;
-		base_function_ptr m_rhs;
+		base_function_ptr _lhs;
+		base_function_ptr _rhs;
 	public:
 		minus_function(base_function_ptr lhs, base_function_ptr rhs);
-		std::string str();
-		double value(double x);
-		base_function_ptr derivative();
+		std::string str() override;
+		double value(double x) override;
+		base_function_ptr derivative() override;
 	};
 
 	class multiply_function :public base_function
 	{
 	private:
-		base_function_ptr m_lhs;
-		base_function_ptr m_rhs;
+		base_function_ptr _lhs;
+		base_function_ptr _rhs;
 	public:
 		multiply_function(base_function_ptr lhs, base_function_ptr rhs);
-		std::string str();
-		double value(double x);
-		base_function_ptr derivative();
+		std::string str() override;
+		double value(double x) override;
+		base_function_ptr derivative() override;
 	};
 
 	class divide_function :public base_function
 	{
 	private:
-		base_function_ptr m_lhs;
-		base_function_ptr m_rhs;
+		base_function_ptr _lhs;
+		base_function_ptr _rhs;
 	public:
 		divide_function(base_function_ptr lhs, base_function_ptr rhs);
-		std::string str();
-		double value(double x);
-		base_function_ptr derivative();
+		std::string str() override;
+		double value(double x) override;
+		base_function_ptr derivative() override;
 	};
 
 	class power_function :public base_function
 	{
 	private:
-		base_function_ptr m_lhs;
-		base_function_ptr m_rhs;
+		base_function_ptr _lhs;
+		base_function_ptr _rhs;
 	public:
 		power_function(base_function_ptr lhs, base_function_ptr rhs);
-		std::string str();
-		double value(double x);
-		base_function_ptr derivative();
+		std::string str() override;
+		double value(double x) override;
+		base_function_ptr derivative() override;
 	};
 
 	class ln_function :public base_function
 	{
 	private:
-		base_function_ptr m_arg;
+		base_function_ptr _arg;
 	public:
 		ln_function(base_function_ptr arg);
-		std::string str();
-		double value(double x);
-		base_function_ptr derivative();
+		std::string str() override;
+		double value(double x) override;
+		base_function_ptr derivative() override;
 	};
 
 	class sin_function :public base_function
 	{
 	private:
-		base_function_ptr m_arg;
+		base_function_ptr _arg;
 	public:
 		sin_function(base_function_ptr arg);
-		std::string str();
-		double value(double x);
-		base_function_ptr derivative();
+		std::string str() override;
+		double value(double x) override;
+		base_function_ptr derivative() override;
 	};
 
 	class cos_function :public base_function
 	{
 	private:
-		base_function_ptr m_arg;
+		base_function_ptr _arg;
 	public:
 		cos_function(base_function_ptr arg);
-		std::string str();
-		double value(double x);
-		base_function_ptr derivative();
+		std::string str() override;
+		double value(double x) override;
+		base_function_ptr derivative() override;
 	};
 
 
