@@ -27,7 +27,8 @@ namespace fp
 		T_POWER_FUNCTION,
 		T_LN_FUNCTION,
 		T_SIN_FUNCTION,
-		T_COS_FUNCTION
+		T_COS_FUNCTION,
+		T_TAN_FUNCTION
 	};
 
 	class base_function
@@ -150,6 +151,17 @@ namespace fp
 		base_function_ptr _arg;
 	public:
 		cos_function(base_function_ptr arg);
+		std::string str() override;
+		double value(double x) override;
+		base_function_ptr derivative() override;
+	};
+
+	class tan_function :public base_function
+	{
+	private:
+		base_function_ptr _arg;
+	public:
+		tan_function(base_function_ptr arg);
 		std::string str() override;
 		double value(double x) override;
 		base_function_ptr derivative() override;
