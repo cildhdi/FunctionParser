@@ -167,7 +167,6 @@ namespace fp
 		base_function_ptr derivative() override;
 	};
 
-
-}
+}//namespace fp
 
 #endif
