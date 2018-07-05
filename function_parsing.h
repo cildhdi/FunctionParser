@@ -37,6 +37,7 @@ namespace fp
 		virtual std::string str() = 0;
 		virtual double value(double x) = 0;
 		virtual base_function_ptr derivative() = 0;
+		virtual base_function_ptr derivative(unsigned int n);
 		const FunctionType _type;
 		base_function(FunctionType type) :_type(type) {}
 	};
