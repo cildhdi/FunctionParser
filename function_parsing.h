@@ -9,10 +9,10 @@
 
 namespace fp
 {
-	class base_function;
-	using base_function_ptr = std::shared_ptr<base_function>;
-	base_function_ptr function_parse(std::string func_str);
-	std::ostream& operator<<(std::ostream& os, base_function_ptr& func);
+	class BaseFunction;
+	using BaseFunctionPtr = std::shared_ptr<BaseFunction>;
+	BaseFunctionPtr function_parse(std::string func_str);
+	std::ostream& operator<<(std::ostream& os, BaseFunctionPtr& func);
 
 
 	enum FunctionType
@@ -31,143 +31,231 @@ namespace fp
 		T_TAN_FUNCTION
 	};
 
-	class base_function
+	class BaseFunction
 	{
 	public:
 		virtual std::string str() = 0;
 		virtual double value(double x) = 0;
-		virtual base_function_ptr derivative() = 0;
-		virtual base_function_ptr derivative(unsigned int n);
+		virtual BaseFunctionPtr derivative() = 0;
+		virtual BaseFunctionPtr derivative(unsigned int n);
 		const FunctionType _type;
-		base_function(FunctionType type) :_type(type) {}
+		BaseFunction(FunctionType type) :_type(type) {}
 	};
 
-	class independent_variable :public base_function
+	class IndependentVariable :public BaseFunction
 	{
 	private:
 		std::string _iv;
 	public:
-		independent_variable(std::string iv);
+		IndependentVariable(std::string iv);
 		std::string str() override;
 		double value(double x) override;
-		base_function_ptr derivative() override;
+		BaseFunctionPtr derivative() override;
 	};
 
-	class constant_function :public base_function
+	class ConstantFunction :public BaseFunction
 	{
 	private:
 		double _c;
 	public:
-		constant_function(double c);
+		ConstantFunction(double c);
 		std::string str() override;
 		double value(double x) override;
-		base_function_ptr derivative() override;
+		BaseFunctionPtr derivative() override;
 	};
 
-	class add_function :public base_function
+	class AddFunction :public BaseFunction
 	{
 	private:
-		base_function_ptr _lhs;
-		base_function_ptr _rhs;
+		BaseFunctionPtr _lhs;
+		BaseFunctionPtr _rhs;
 	public:
-		add_function(base_function_ptr lhs, base_function_ptr rhs);
+		AddFunction(BaseFunctionPtr lhs, BaseFunctionPtr rhs);
 		std::string str() override;
 		double value(double x) override;
-		base_function_ptr derivative() override;
+		BaseFunctionPtr derivative() override;
 	};
 
-	class minus_function :public base_function
+	class MinusFunction :public BaseFunction
 	{
 	private:
-		base_function_ptr _lhs;
-		base_function_ptr _rhs;
+		BaseFunctionPtr _lhs;
+		BaseFunctionPtr _rhs;
 	public:
-		minus_function(base_function_ptr lhs, base_function_ptr rhs);
+		MinusFunction(BaseFunctionPtr lhs, BaseFunctionPtr rhs);
 		std::string str() override;
 		double value(double x) override;
-		base_function_ptr derivative() override;
+		BaseFunctionPtr derivative() override;
 	};
 
-	class multiply_function :public base_function
+	class MultiplyFunction :public BaseFunction
 	{
 	private:
-		base_function_ptr _lhs;
-		base_function_ptr _rhs;
+		BaseFunctionPtr _lhs;
+		BaseFunctionPtr _rhs;
 	public:
-		multiply_function(base_function_ptr lhs, base_function_ptr rhs);
+		MultiplyFunction(BaseFunctionPtr lhs, BaseFunctionPtr rhs);
 		std::string str() override;
 		double value(double x) override;
-		base_function_ptr derivative() override;
+		BaseFunctionPtr derivative() override;
 	};
 
-	class divide_function :public base_function
+	class DivideFunction :public BaseFunction
 	{
 	private:
-		base_function_ptr _lhs;
-		base_function_ptr _rhs;
+		BaseFunctionPtr _lhs;
+		BaseFunctionPtr _rhs;
 	public:
-		divide_function(base_function_ptr lhs, base_function_ptr rhs);
+		DivideFunction(BaseFunctionPtr lhs, BaseFunctionPtr rhs);
 		std::string str() override;
 		double value(double x) override;
-		base_function_ptr derivative() override;
+		BaseFunctionPtr derivative() override;
 	};
 
-	class power_function :public base_function
+	class PowerFunction :public BaseFunction
 	{
 	private:
-		base_function_ptr _lhs;
-		base_function_ptr _rhs;
+		BaseFunctionPtr _lhs;
+		BaseFunctionPtr _rhs;
 	public:
-		power_function(base_function_ptr lhs, base_function_ptr rhs);
+		PowerFunction(BaseFunctionPtr lhs, BaseFunctionPtr rhs);
 		std::string str() override;
 		double value(double x) override;
-		base_function_ptr derivative() override;
+		BaseFunctionPtr derivative() override;
 	};
 
-	class ln_function :public base_function
+	class LnFunction :public BaseFunction
 	{
 	private:
-		base_function_ptr _arg;
+		BaseFunctionPtr _arg;
 	public:
-		ln_function(base_function_ptr arg);
+		LnFunction(BaseFunctionPtr arg);
 		std::string str() override;
 		double value(double x) override;
-		base_function_ptr derivative() override;
+		BaseFunctionPtr derivative() override;
 	};
 
-	class sin_function :public base_function
+	class SinFunction :public BaseFunction
 	{
 	private:
-		base_function_ptr _arg;
+		BaseFunctionPtr _arg;
 	public:
-		sin_function(base_function_ptr arg);
+		SinFunction(BaseFunctionPtr arg);
 		std::string str() override;
 		double value(double x) override;
-		base_function_ptr derivative() override;
+		BaseFunctionPtr derivative() override;
 	};
 
-	class cos_function :public base_function
+	class CosFunction :public BaseFunction
 	{
 	private:
-		base_function_ptr _arg;
+		BaseFunctionPtr _arg;
 	public:
-		cos_function(base_function_ptr arg);
+		CosFunction(BaseFunctionPtr arg);
 		std::string str() override;
 		double value(double x) override;
-		base_function_ptr derivative() override;
+		BaseFunctionPtr derivative() override;
 	};
 
-	class tan_function :public base_function
+	class TanFunction :public BaseFunction
 	{
 	private:
-		base_function_ptr _arg;
+		BaseFunctionPtr _arg;
 	public:
-		tan_function(base_function_ptr arg);
+		TanFunction(BaseFunctionPtr arg);
 		std::string str() override;
 		double value(double x) override;
-		base_function_ptr derivative() override;
+		BaseFunctionPtr derivative() override;
 	};
 
+	//for piecewise function
+	class SegmentPoint
+	{
+	private:
+		double _value;
+		bool _contain;
+	public:
+		SegmentPoint(double value = 0, bool contain = false)
+			: _value(value), _contain(contain)
+		{
+		}
+
+		double value() const
+		{
+			return _value;
+		}
+
+		void set_value(double v)
+		{
+			_value = v;
+		}
+
+		bool contain() const
+		{
+			return _contain;
+		}
+
+		void set_contain(bool c)
+		{
+			_contain = c;
+		}
+
+		bool operator<(const SegmentPoint& rhs) const
+		{
+			return _value < rhs._value;
+		}
+
+		bool operator>(const SegmentPoint& rhs) const
+		{
+			return _value > rhs._value;
+		}
+	};
+
+	class Segment
+	{
+	private:
+		SegmentPoint _left;
+		SegmentPoint _right;
+	public:
+		Segment()
+		{
+		}
+
+		Segment(const SegmentPoint& lp, const SegmentPoint& rp)
+		{
+			set_point(lp, rp);
+		}
+
+		void set_point(const SegmentPoint& lp, const SegmentPoint& rp)
+		{
+			if (lp < rp)
+			{
+				_left = lp;
+				_right = rp;
+			}
+			else
+			{
+				_left = rp;
+				_right = lp;
+			}
+		}
+
+		void set_left_point(const SegmentPoint& lp)
+		{
+			set_point(lp, _right);
+		}
+
+		void set_right_point(const SegmentPoint& rp)
+		{
+			set_point(_left, rp);
+		}
+
+	};
+
+	class PiecewiseFunction :public BaseFunction
+	{
+	private:
+	};
 }//namespace fp
 
 #endif

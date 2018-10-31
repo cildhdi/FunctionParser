@@ -5,7 +5,7 @@
 namespace fp
 {
 
-	std::ostream& operator<<(std::ostream& os, base_function_ptr& func)
+	std::ostream& operator<<(std::ostream& os, BaseFunctionPtr& func)
 	{
 		os << func->str();
 		return os;
@@ -13,10 +13,10 @@ namespace fp
 
 	//class defination
 	//base_function
-	base_function_ptr base_function::derivative(unsigned int n)
+	BaseFunctionPtr BaseFunction::derivative(unsigned int n)
 	{
 		if (n == 0)return nullptr;
-		base_function_ptr f = this->derivative();
+		BaseFunctionPtr f = this->derivative();
 		while (--n)
 		{
 			f = f->derivative();
@@ -25,31 +25,31 @@ namespace fp
 	}
 
 	//independent_variable
-	independent_variable::independent_variable(std::string iv) :_iv(iv), base_function(T_INDEPENDENT_VARIABLE)
+	IndependentVariable::IndependentVariable(std::string iv) :_iv(iv), BaseFunction(T_INDEPENDENT_VARIABLE)
 	{
 	}
 
-	std::string independent_variable::str()
+	std::string IndependentVariable::str()
 	{
 		return _iv;
 	}
 
-	double independent_variable::value(double x)
+	double IndependentVariable::value(double x)
 	{
 		return x;
 	}
 
-	base_function_ptr independent_variable::derivative()
+	BaseFunctionPtr IndependentVariable::derivative()
 	{
-		return std::make_shared<constant_function>(1);
+		return std::make_shared<ConstantFunction>(1);
 	}
 
 	//constant_function
-	constant_function::constant_function(double c) :_c(c), base_function(T_CONSTANT_FUNCTION)
+	ConstantFunction::ConstantFunction(double c) :_c(c), BaseFunction(T_CONSTANT_FUNCTION)
 	{
 	}
 
-	std::string constant_function::str()
+	std::string ConstantFunction::str()
 	{
 		auto str = std::to_string(_c);
 		while ((!str.empty()) && str.at(str.size() - 1) == '0')
@@ -63,277 +63,213 @@ namespace fp
 		return str;
 	}
 
-	double constant_function::value(double x)
+	double ConstantFunction::value(double x)
 	{
 		return _c;
 	}
 
-	base_function_ptr constant_function::derivative()
+	BaseFunctionPtr ConstantFunction::derivative()
 	{
-		return std::make_shared<constant_function>(0);
+		return std::make_shared<ConstantFunction>(0);
 	}
 
 	//add_function
-	add_function::add_function(base_function_ptr lhs, base_function_ptr rhs) :_lhs(lhs), _rhs(rhs), base_function(T_ADD_FUNCTION)
+	AddFunction::AddFunction(BaseFunctionPtr lhs, BaseFunctionPtr rhs) :_lhs(lhs), _rhs(rhs), BaseFunction(T_ADD_FUNCTION)
 	{
 	}
 
-	std::string add_function::str()
+	std::string AddFunction::str()
 	{
 		return "(" + _lhs->str() + "+" + _rhs->str() + ")";
 	}
 
-	double add_function::value(double x)
+	double AddFunction::value(double x)
 	{
-		try
-		{
-			return _lhs->value(x) + _rhs->value(x);
-		}
-		catch (...)
-		{
-			throw;
-		}
+		return _lhs->value(x) + _rhs->value(x);
 	}
 
-	base_function_ptr add_function::derivative()
+	BaseFunctionPtr AddFunction::derivative()
 	{
-		return std::make_shared<add_function>(_lhs->derivative(), _rhs->derivative());
+		return std::make_shared<AddFunction>(_lhs->derivative(), _rhs->derivative());
 	}
 
 	//minus_function
-	minus_function::minus_function(base_function_ptr lhs, base_function_ptr rhs) :_lhs(lhs), _rhs(rhs), base_function(T_MINUS_FUNCTION)
+	MinusFunction::MinusFunction(BaseFunctionPtr lhs, BaseFunctionPtr rhs) :_lhs(lhs), _rhs(rhs), BaseFunction(T_MINUS_FUNCTION)
 	{
 	}
 
-	std::string minus_function::str()
+	std::string MinusFunction::str()
 	{
 		return "(" + _lhs->str() + "-" + _rhs->str() + ")";
 	}
 
-	double minus_function::value(double x)
+	double MinusFunction::value(double x)
 	{
-		try
-		{
-			return _lhs->value(x) - _rhs->value(x);
-		}
-		catch (...)
-		{
-			throw;
-		}
+		return _lhs->value(x) - _rhs->value(x);
 	}
 
-	base_function_ptr minus_function::derivative()
+	BaseFunctionPtr MinusFunction::derivative()
 	{
-		return std::make_shared<minus_function>(_lhs->derivative(), _rhs->derivative());
+		return std::make_shared<MinusFunction>(_lhs->derivative(), _rhs->derivative());
 	}
 
 	//multiply_function
-	multiply_function::multiply_function(base_function_ptr lhs, base_function_ptr rhs) :_lhs(lhs), _rhs(rhs), base_function(T_MULTIPLY_FUNCTION)
+	MultiplyFunction::MultiplyFunction(BaseFunctionPtr lhs, BaseFunctionPtr rhs) :_lhs(lhs), _rhs(rhs), BaseFunction(T_MULTIPLY_FUNCTION)
 	{
 	}
 
-	std::string multiply_function::str()
+	std::string MultiplyFunction::str()
 	{
 		return "(" + _lhs->str() + "*" + _rhs->str() + ")";
 	}
 
-	double multiply_function::value(double x)
+	double MultiplyFunction::value(double x)
 	{
-		try
-		{
-			return _lhs->value(x) * _rhs->value(x);
-		}
-		catch (...)
-		{
-			throw;
-		}
+		return _lhs->value(x) * _rhs->value(x);
 	}
 
-	base_function_ptr multiply_function::derivative()
+	BaseFunctionPtr MultiplyFunction::derivative()
 	{
-		return std::make_shared<add_function>(std::make_shared<multiply_function>(_lhs->derivative(), _rhs), std::make_shared<multiply_function>(_lhs, _rhs->derivative()));
+		return std::make_shared<AddFunction>(std::make_shared<MultiplyFunction>(_lhs->derivative(), _rhs), std::make_shared<MultiplyFunction>(_lhs, _rhs->derivative()));
 	}
 
 	//divide_function
-	divide_function::divide_function(base_function_ptr lhs, base_function_ptr rhs) :_lhs(lhs), _rhs(rhs), base_function(T_DIVIDE_FUNCTION)
+	DivideFunction::DivideFunction(BaseFunctionPtr lhs, BaseFunctionPtr rhs) :_lhs(lhs), _rhs(rhs), BaseFunction(T_DIVIDE_FUNCTION)
 	{
 	}
 
-	std::string divide_function::str()
+	std::string DivideFunction::str()
 	{
 		return "(" + _lhs->str() + "/" + _rhs->str() + ")";
 	}
 
-	double divide_function::value(double x)
+	double DivideFunction::value(double x)
 	{
-		try
-		{
-			return  _lhs->value(x) / _rhs->value(x);
-		}
-		catch (...)
-		{
-			throw;
-		}
+		return  _lhs->value(x) / _rhs->value(x);
 	}
 
-	base_function_ptr divide_function::derivative()
+	BaseFunctionPtr DivideFunction::derivative()
 	{
-		return std::make_shared<divide_function>(std::make_shared<minus_function>(std::make_shared<multiply_function>(_lhs->derivative(), _rhs), std::make_shared<multiply_function>(_lhs, _rhs->derivative())), std::make_shared<multiply_function>(_rhs, _rhs));
+		return std::make_shared<DivideFunction>(std::make_shared<MinusFunction>(std::make_shared<MultiplyFunction>(_lhs->derivative(), _rhs), std::make_shared<MultiplyFunction>(_lhs, _rhs->derivative())), std::make_shared<MultiplyFunction>(_rhs, _rhs));
 	}
 
 	//power_function
-	power_function::power_function(base_function_ptr lhs, base_function_ptr rhs) :_lhs(lhs), _rhs(rhs), base_function(T_POWER_FUNCTION)
+	PowerFunction::PowerFunction(BaseFunctionPtr lhs, BaseFunctionPtr rhs) :_lhs(lhs), _rhs(rhs), BaseFunction(T_POWER_FUNCTION)
 	{
 	}
 
-	std::string power_function::str()
+	std::string PowerFunction::str()
 	{
 		return "(" + _lhs->str() + "^" + _rhs->str() + ")";
 	}
 
-	double power_function::value(double x)
+	double PowerFunction::value(double x)
 	{
-		try
-		{
-			return pow(_lhs->value(x), _rhs->value(x));
-		}
-		catch (...)
-		{
-			throw;
-		}
-
+		return pow(_lhs->value(x), _rhs->value(x));
 	}
 
-	base_function_ptr power_function::derivative()
+	BaseFunctionPtr PowerFunction::derivative()
 	{
 		if (_rhs->_type == T_CONSTANT_FUNCTION)
 		{
-			return std::make_shared<multiply_function>(std::make_shared<multiply_function>
-				(std::make_shared<constant_function>(_rhs->value(0)),
-					std::make_shared<power_function>(_lhs,
-						std::make_shared<constant_function>(_rhs->value(0) - 1))), _lhs->derivative());
+			return std::make_shared<MultiplyFunction>(std::make_shared<MultiplyFunction>
+				(std::make_shared<ConstantFunction>(_rhs->value(0)),
+					std::make_shared<PowerFunction>(_lhs,
+						std::make_shared<ConstantFunction>(_rhs->value(0) - 1))), _lhs->derivative());
 		}
 		else
 		{
-			return std::make_shared<multiply_function>
-				(std::make_shared<power_function>(_lhs, _rhs),
-					std::make_shared<add_function>(std::make_shared<multiply_function>
-					(_rhs->derivative(), std::make_shared<ln_function>(_lhs)),
-						std::make_shared<multiply_function>(_rhs,
-							std::make_shared<ln_function>(_lhs)->derivative())));
+			return std::make_shared<MultiplyFunction>
+				(std::make_shared<PowerFunction>(_lhs, _rhs),
+					std::make_shared<AddFunction>(std::make_shared<MultiplyFunction>
+					(_rhs->derivative(), std::make_shared<LnFunction>(_lhs)),
+						std::make_shared<MultiplyFunction>(_rhs,
+							std::make_shared<LnFunction>(_lhs)->derivative())));
 		}
 	}
 
 	//ln_function
-	ln_function::ln_function(base_function_ptr arg) :_arg(arg), base_function(T_LN_FUNCTION)
+	LnFunction::LnFunction(BaseFunctionPtr arg) :_arg(arg), BaseFunction(T_LN_FUNCTION)
 	{
 	}
 
-	std::string ln_function::str()
+	std::string LnFunction::str()
 	{
 		return "(ln" + _arg->str() + ")";
 	}
 
-	double ln_function::value(double x)
+	double LnFunction::value(double x)
 	{
-		try
-		{
-			return std::log(_arg->value(x));
-		}
-		catch (...)
-		{
-			throw;
-		}
+		return std::log(_arg->value(x));
 	}
 
-	base_function_ptr ln_function::derivative()
+	BaseFunctionPtr LnFunction::derivative()
 	{
-		return std::make_shared<multiply_function>(std::make_shared<divide_function>(std::make_shared<constant_function>(1), _arg), _arg->derivative());
+		return std::make_shared<MultiplyFunction>(std::make_shared<DivideFunction>(std::make_shared<ConstantFunction>(1), _arg), _arg->derivative());
 	}
 
 
 	//sin_function
-	sin_function::sin_function(base_function_ptr arg) :_arg(arg), base_function(T_SIN_FUNCTION)
+	SinFunction::SinFunction(BaseFunctionPtr arg) :_arg(arg), BaseFunction(T_SIN_FUNCTION)
 	{
 	}
 
-	std::string sin_function::str()
+	std::string SinFunction::str()
 	{
 		return "(sin" + _arg->str() + ")";
 	}
 
-	double sin_function::value(double x)
+	double SinFunction::value(double x)
 	{
-		try
-		{
-			return std::sin(_arg->value(x));
-		}
-		catch (...)
-		{
-			throw;
-		}
+		return std::sin(_arg->value(x));
 	}
 
-	base_function_ptr sin_function::derivative()
+	BaseFunctionPtr SinFunction::derivative()
 	{
-		return std::make_shared<multiply_function>(std::make_shared<cos_function>(_arg), _arg->derivative());
+		return std::make_shared<MultiplyFunction>(std::make_shared<CosFunction>(_arg), _arg->derivative());
 	}
 
 	//cos_function
-	cos_function::cos_function(base_function_ptr arg) :_arg(arg), base_function(T_COS_FUNCTION)
+	CosFunction::CosFunction(BaseFunctionPtr arg) :_arg(arg), BaseFunction(T_COS_FUNCTION)
 	{
 	}
 
-	std::string cos_function::str()
+	std::string CosFunction::str()
 	{
 		return "(cos" + _arg->str() + ")";
 	}
 
-	double cos_function::value(double x)
+	double CosFunction::value(double x)
 	{
-		try
-		{
-			return std::cos(_arg->value(x));
-		}
-		catch (...)
-		{
-			throw;
-		}
+		return std::cos(_arg->value(x));
 	}
 
-	base_function_ptr cos_function::derivative()
+	BaseFunctionPtr CosFunction::derivative()
 	{
-		return std::make_shared<multiply_function>(std::make_shared<constant_function>(-1), std::make_shared<multiply_function>(std::make_shared<sin_function>(_arg), _arg->derivative()));
+		return std::make_shared<MultiplyFunction>(std::make_shared<ConstantFunction>(-1), std::make_shared<MultiplyFunction>(std::make_shared<SinFunction>(_arg), _arg->derivative()));
 	}
 
 	//tan_function
 
-	tan_function::tan_function(base_function_ptr arg) :_arg(arg), base_function(T_TAN_FUNCTION)
+	TanFunction::TanFunction(BaseFunctionPtr arg) :_arg(arg), BaseFunction(T_TAN_FUNCTION)
 	{
 	}
 
-	std::string tan_function::str()
+	std::string TanFunction::str()
 	{
 		return "(tan" + _arg->str() + ")";
 	}
 
-	double tan_function::value(double x)
+	double TanFunction::value(double x)
 	{
-		try
-		{
-			return tan(_arg->value(x));
-		}
-		catch (...)
-		{
-			throw;
-		}
+		return tan(_arg->value(x));
 	}
 
-	base_function_ptr tan_function::derivative()
+	BaseFunctionPtr TanFunction::derivative()
 	{
-		return std::make_shared<multiply_function>(std::make_shared<divide_function>
-			(std::make_shared<constant_function>(1),
-				std::make_shared<power_function>(_arg, std::make_shared<constant_function>(2))), _arg->derivative());
+		return std::make_shared<MultiplyFunction>(std::make_shared<DivideFunction>
+			(std::make_shared<ConstantFunction>(1),
+				std::make_shared<PowerFunction>(_arg, std::make_shared<ConstantFunction>(2))), _arg->derivative());
 	}
 
 
@@ -421,79 +357,134 @@ namespace fp
 	}
 
 
-	base_function_ptr function_parse(std::string func_str)
+	BaseFunctionPtr function_parse(std::string func_str)
 	{
-		try
+		func_str.erase(std::remove_if(func_str.begin(), func_str.end(),
+			[](char c) { return c == ' '; }), func_str.end());
+		while ((!func_str.empty()) && func_str.at(0) == '('&&get_matching_bracket(func_str, 0) == (func_str.size() - 1))
 		{
-			func_str.erase(std::remove_if(func_str.begin(), func_str.end(),
-				[](char c) {return c == ' '; }), func_str.end());
-			while ((!func_str.empty()) && func_str.at(0) == '('&&get_matching_bracket(func_str, 0) == (func_str.size() - 1))
-			{
-				func_str.erase(func_str.begin());
-				func_str.pop_back();
-			}
-			if (func_str.empty())
-			{
-				return std::make_shared<constant_function>(0);
-			}
+			func_str.erase(func_str.begin());
+			func_str.pop_back();
+		}
+		if (func_str.empty())
+		{
+			return std::make_shared<ConstantFunction>(0);
+		}
 
-			if (func_str.at(func_str.size() - 1) == ')')
+		if (func_str.at(func_str.size() - 1) == ')')
+		{
+			unsigned int fb = get_matching_bracket(func_str, func_str.size() - 1);
+			if (fb == -1)
 			{
-				unsigned int fb = get_matching_bracket(func_str, func_str.size() - 1);
-				if (fb == -1)
+				THROW_PARSE_ERROR;
+			}
+			auto func_name = func_str.substr(0, fb);
+			if (!(include_brackets(func_name) || include_operators(func_name)))
+			{
+				if (func_name == "ln")
+				{
+					return std::make_shared<LnFunction>(function_parse(func_str.substr(fb, func_str.size() - fb)));
+				}
+				else if (func_name == "sin")
+				{
+					return std::make_shared<SinFunction>(function_parse(func_str.substr(fb, func_str.size() - fb)));
+				}
+				else if (func_name == "cos")
+				{
+					return std::make_shared<CosFunction>(function_parse(func_str.substr(fb, func_str.size() - fb)));
+				}
+				else if (func_name == "tan")
+				{
+					return std::make_shared<TanFunction>(function_parse(func_str.substr(fb, func_str.size() - fb)));
+				}
+			}
+		}
+
+		if (!include_operators(func_str))
+		{
+			if (is_number(func_str))
+			{
+				return std::make_shared<ConstantFunction>(std::atof(func_str.c_str()));
+			}
+			else
+			{
+				return std::make_shared<IndependentVariable>(func_str);
+			}
+		}
+
+
+		unsigned int i = 0;
+		std::vector<unsigned int> operators;
+		while (i < func_str.size())
+		{
+			if (func_str.at(i) == '(')
+			{
+				auto next_bracket = get_matching_bracket(func_str, i);
+				if (next_bracket == -1)
 				{
 					THROW_PARSE_ERROR;
 				}
-				auto func_name = func_str.substr(0, fb);
-				if (!(include_brackets(func_name) || include_operators(func_name)))
-				{
-					if (func_name == "ln")
-					{
-						return std::make_shared<ln_function>(function_parse(func_str.substr(fb, func_str.size() - fb)));
-					}
-					else if (func_name == "sin")
-					{
-						return std::make_shared<sin_function>(function_parse(func_str.substr(fb, func_str.size() - fb)));
-					}
-					else if (func_name == "cos")
-					{
-						return std::make_shared<cos_function>(function_parse(func_str.substr(fb, func_str.size() - fb)));
-					}
-					else if (func_name == "tan")
-					{
-						return std::make_shared<tan_function>(function_parse(func_str.substr(fb, func_str.size() - fb)));
-					}
-				}
+				i = next_bracket + 1;
+				continue;
 			}
-
-			if (!include_operators(func_str))
+			if (is_add_or_minus(func_str.at(i)))
 			{
-				if (is_number(func_str))
+				operators.push_back(i);
+			}
+			i++;
+		}
+		if (!operators.empty())
+		{
+			auto ped = function_parse(func_str.substr(0, operators[0]));
+			for (i = 0; i < operators.size(); i++)
+			{
+				if (ped == nullptr)
 				{
-					return std::make_shared<constant_function>(std::atof(func_str.c_str()));
+					THROW_PARSE_ERROR;
 				}
-				else
+				switch (func_str.at(operators.at(i)))
 				{
-					return std::make_shared<independent_variable>(func_str);
+				case '+':
+					if (i != operators.size() - 1)
+					{
+						ped = std::make_shared<AddFunction>(ped, function_parse(func_str.substr(operators.at(i) + 1, operators.at(i + 1) - operators.at(i) - 1)));
+					}
+					else
+					{
+						ped = std::make_shared<AddFunction>(ped, function_parse(func_str.substr(operators.at(i) + 1, func_str.size() - operators.at(i) - 1)));
+					}
+					break;
+				case '-':
+					if (i != operators.size() - 1)
+					{
+						ped = std::make_shared<MinusFunction>(ped, function_parse(func_str.substr(operators.at(i) + 1, operators.at(i + 1) - operators.at(i) - 1)));
+					}
+					else
+					{
+						ped = std::make_shared<MinusFunction>(ped, function_parse(func_str.substr(operators.at(i) + 1, func_str.size() - operators.at(i) - 1)));
+					}
+					break;
 				}
 			}
-
-
-			unsigned int i = 0;
-			std::vector<unsigned int> operators;
+			return ped;
+		}
+		else
+		{
+			operators.clear();
+			i = 0;
 			while (i < func_str.size())
 			{
 				if (func_str.at(i) == '(')
 				{
-					auto next_br = get_matching_bracket(func_str, i);
-					if (next_br == -1)
+					auto next_bracket = get_matching_bracket(func_str, i);
+					if (next_bracket == -1)
 					{
 						THROW_PARSE_ERROR;
 					}
-					i = next_br + 1;
+					i = next_bracket + 1;
 					continue;
 				}
-				if (is_add_or_minus(func_str.at(i)))
+				if (is_multiply_or_divide(func_str.at(i)))
 				{
 					operators.push_back(i);
 				}
@@ -501,38 +492,38 @@ namespace fp
 			}
 			if (!operators.empty())
 			{
-				auto pPre = function_parse(func_str.substr(0, operators[0]));
+				auto ped = function_parse(func_str.substr(0, operators[0]));
 				for (i = 0; i < operators.size(); i++)
 				{
-					if (pPre == nullptr)
+					if (ped == nullptr)
 					{
 						THROW_PARSE_ERROR;
 					}
 					switch (func_str.at(operators.at(i)))
 					{
-					case '+':
+					case '*':
 						if (i != operators.size() - 1)
 						{
-							pPre = std::make_shared<add_function>(pPre, function_parse(func_str.substr(operators.at(i) + 1, operators.at(i + 1) - operators.at(i) - 1)));
+							ped = std::make_shared<MultiplyFunction>(ped, function_parse(func_str.substr(operators.at(i) + 1, operators.at(i + 1) - operators.at(i) - 1)));
 						}
 						else
 						{
-							pPre = std::make_shared<add_function>(pPre, function_parse(func_str.substr(operators.at(i) + 1, func_str.size() - operators.at(i) - 1)));
+							ped = std::make_shared<MultiplyFunction>(ped, function_parse(func_str.substr(operators.at(i) + 1, func_str.size() - operators.at(i) - 1)));
 						}
 						break;
-					case '-':
+					case '/':
 						if (i != operators.size() - 1)
 						{
-							pPre = std::make_shared<minus_function>(pPre, function_parse(func_str.substr(operators.at(i) + 1, operators.at(i + 1) - operators.at(i) - 1)));
+							ped = std::make_shared<DivideFunction>(ped, function_parse(func_str.substr(operators.at(i) + 1, operators.at(i + 1) - operators.at(i) - 1)));
 						}
 						else
 						{
-							pPre = std::make_shared<minus_function>(pPre, function_parse(func_str.substr(operators.at(i) + 1, func_str.size() - operators.at(i) - 1)));
+							ped = std::make_shared<DivideFunction>(ped, function_parse(func_str.substr(operators.at(i) + 1, func_str.size() - operators.at(i) - 1)));
 						}
 						break;
 					}
 				}
-				return pPre;
+				return ped;
 			}
 			else
 			{
@@ -542,15 +533,15 @@ namespace fp
 				{
 					if (func_str.at(i) == '(')
 					{
-						auto next_br = get_matching_bracket(func_str, i);
-						if (next_br == -1)
+						auto next_bracket = get_matching_bracket(func_str, i);
+						if (next_bracket == -1)
 						{
 							THROW_PARSE_ERROR;
 						}
-						i = next_br + 1;
+						i = next_bracket + 1;
 						continue;
 					}
-					if (is_multiply_or_divide(func_str.at(i)))
+					if (is_power(func_str.at(i)))
 					{
 						operators.push_back(i);
 					}
@@ -558,87 +549,25 @@ namespace fp
 				}
 				if (!operators.empty())
 				{
-					auto pPre = function_parse(func_str.substr(0, operators[0]));
+					auto ped = function_parse(func_str.substr(0, operators[0]));
 					for (i = 0; i < operators.size(); i++)
 					{
-						if (pPre == nullptr)
+						if (ped == nullptr)
 						{
 							THROW_PARSE_ERROR;
 						}
-						switch (func_str.at(operators.at(i)))
+						if (i != operators.size() - 1)
 						{
-						case '*':
-							if (i != operators.size() - 1)
-							{
-								pPre = std::make_shared<multiply_function>(pPre, function_parse(func_str.substr(operators.at(i) + 1, operators.at(i + 1) - operators.at(i) - 1)));
-							}
-							else
-							{
-								pPre = std::make_shared<multiply_function>(pPre, function_parse(func_str.substr(operators.at(i) + 1, func_str.size() - operators.at(i) - 1)));
-							}
-							break;
-						case '/':
-							if (i != operators.size() - 1)
-							{
-								pPre = std::make_shared<divide_function>(pPre, function_parse(func_str.substr(operators.at(i) + 1, operators.at(i + 1) - operators.at(i) - 1)));
-							}
-							else
-							{
-								pPre = std::make_shared<divide_function>(pPre, function_parse(func_str.substr(operators.at(i) + 1, func_str.size() - operators.at(i) - 1)));
-							}
-							break;
+							ped = std::make_shared<PowerFunction>(ped, function_parse(func_str.substr(operators.at(i) + 1, operators.at(i + 1) - operators.at(i) - 1)));
+						}
+						else
+						{
+							ped = std::make_shared<PowerFunction>(ped, function_parse(func_str.substr(operators.at(i) + 1, func_str.size() - operators.at(i) - 1)));
 						}
 					}
-					return pPre;
-				}
-				else
-				{
-					operators.clear();
-					i = 0;
-					while (i < func_str.size())
-					{
-						if (func_str.at(i) == '(')
-						{
-							auto next_br = get_matching_bracket(func_str, i);
-							if (next_br == -1)
-							{
-								THROW_PARSE_ERROR;
-							}
-							i = next_br + 1;
-							continue;
-						}
-						if (is_power(func_str.at(i)))
-						{
-							operators.push_back(i);
-						}
-						i++;
-					}
-					if (!operators.empty())
-					{
-						auto pPre = function_parse(func_str.substr(0, operators[0]));
-						for (i = 0; i < operators.size(); i++)
-						{
-							if (pPre == nullptr)
-							{
-								THROW_PARSE_ERROR;
-							}
-							if (i != operators.size() - 1)
-							{
-								pPre = std::make_shared<power_function>(pPre, function_parse(func_str.substr(operators.at(i) + 1, operators.at(i + 1) - operators.at(i) - 1)));
-							}
-							else
-							{
-								pPre = std::make_shared<power_function>(pPre, function_parse(func_str.substr(operators.at(i) + 1, func_str.size() - operators.at(i) - 1)));
-							}
-						}
-						return pPre;
-					}
+					return ped;
 				}
 			}
-		}
-		catch (...)
-		{
-			throw;
 		}
 		THROW_PARSE_ERROR;
 		return nullptr;
