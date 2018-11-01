@@ -12,7 +12,7 @@ namespace fp
 	}
 
 	//class defination
-	//base_function
+	//base function
 	BaseFunctionPtr BaseFunction::derivative(unsigned int n)
 	{
 		if (n == 0)return nullptr;
@@ -44,7 +44,7 @@ namespace fp
 		return std::make_shared<ConstantFunction>(1);
 	}
 
-	//constant_function
+	//constant function
 	ConstantFunction::ConstantFunction(double c) :_c(c), BaseFunction(T_CONSTANT_FUNCTION)
 	{
 	}
@@ -73,7 +73,7 @@ namespace fp
 		return std::make_shared<ConstantFunction>(0);
 	}
 
-	//add_function
+	//add function
 	AddFunction::AddFunction(BaseFunctionPtr lhs, BaseFunctionPtr rhs) :_lhs(lhs), _rhs(rhs), BaseFunction(T_ADD_FUNCTION)
 	{
 	}
@@ -93,7 +93,7 @@ namespace fp
 		return std::make_shared<AddFunction>(_lhs->derivative(), _rhs->derivative());
 	}
 
-	//minus_function
+	//minus function
 	MinusFunction::MinusFunction(BaseFunctionPtr lhs, BaseFunctionPtr rhs) :_lhs(lhs), _rhs(rhs), BaseFunction(T_MINUS_FUNCTION)
 	{
 	}
@@ -113,7 +113,7 @@ namespace fp
 		return std::make_shared<MinusFunction>(_lhs->derivative(), _rhs->derivative());
 	}
 
-	//multiply_function
+	//multiply function
 	MultiplyFunction::MultiplyFunction(BaseFunctionPtr lhs, BaseFunctionPtr rhs) :_lhs(lhs), _rhs(rhs), BaseFunction(T_MULTIPLY_FUNCTION)
 	{
 	}
@@ -133,7 +133,7 @@ namespace fp
 		return std::make_shared<AddFunction>(std::make_shared<MultiplyFunction>(_lhs->derivative(), _rhs), std::make_shared<MultiplyFunction>(_lhs, _rhs->derivative()));
 	}
 
-	//divide_function
+	//divide function
 	DivideFunction::DivideFunction(BaseFunctionPtr lhs, BaseFunctionPtr rhs) :_lhs(lhs), _rhs(rhs), BaseFunction(T_DIVIDE_FUNCTION)
 	{
 	}
@@ -153,7 +153,7 @@ namespace fp
 		return std::make_shared<DivideFunction>(std::make_shared<MinusFunction>(std::make_shared<MultiplyFunction>(_lhs->derivative(), _rhs), std::make_shared<MultiplyFunction>(_lhs, _rhs->derivative())), std::make_shared<MultiplyFunction>(_rhs, _rhs));
 	}
 
-	//power_function
+	//power function
 	PowerFunction::PowerFunction(BaseFunctionPtr lhs, BaseFunctionPtr rhs) :_lhs(lhs), _rhs(rhs), BaseFunction(T_POWER_FUNCTION)
 	{
 	}
@@ -188,7 +188,7 @@ namespace fp
 		}
 	}
 
-	//ln_function
+	//ln function
 	LnFunction::LnFunction(BaseFunctionPtr arg) :_arg(arg), BaseFunction(T_LN_FUNCTION)
 	{
 	}
@@ -209,7 +209,7 @@ namespace fp
 	}
 
 
-	//sin_function
+	//sin function
 	SinFunction::SinFunction(BaseFunctionPtr arg) :_arg(arg), BaseFunction(T_SIN_FUNCTION)
 	{
 	}
@@ -229,7 +229,7 @@ namespace fp
 		return std::make_shared<MultiplyFunction>(std::make_shared<CosFunction>(_arg), _arg->derivative());
 	}
 
-	//cos_function
+	//cos function
 	CosFunction::CosFunction(BaseFunctionPtr arg) :_arg(arg), BaseFunction(T_COS_FUNCTION)
 	{
 	}
@@ -249,7 +249,7 @@ namespace fp
 		return std::make_shared<MultiplyFunction>(std::make_shared<ConstantFunction>(-1), std::make_shared<MultiplyFunction>(std::make_shared<SinFunction>(_arg), _arg->derivative()));
 	}
 
-	//tan_function
+	//tan function
 
 	TanFunction::TanFunction(BaseFunctionPtr arg) :_arg(arg), BaseFunction(T_TAN_FUNCTION)
 	{
@@ -272,7 +272,62 @@ namespace fp
 				std::make_shared<PowerFunction>(_arg, std::make_shared<ConstantFunction>(2))), _arg->derivative());
 	}
 
+	//picewise funciton
+	PiecewiseFunction::PiecewiseFunction(std::initializer_list<Function> functions) : BaseFunction(T_PICEWISE_FUNCTION)
+	{
+		_functions.assign(functions);
+		std::sort(_functions.begin(), _functions.end(), [](const Function& lhs, const Function& rhs)
+		{
+			return lhs.second > rhs.second;
+		});
+	}
 
+	void PiecewiseFunction::add_function(Function function)
+	{
+		_functions.push_back(function);
+		std::sort(_functions.begin(), _functions.end(), [](const Function& lhs, const Function& rhs)
+		{
+			return lhs.second > rhs.second;
+		});
+	}
+
+	void PiecewiseFunction::remove_function(double value)
+	{
+		_functions.erase(std::remove_if(_functions.begin(), _functions.end(), [value](const Function& function)
+		{
+			return function.first.contain(value);
+		}), _functions.end());
+	}
+
+	std::string PiecewiseFunction::str()
+	{
+		if (_functions.empty()) return "";
+		std::string res = "\n";
+		for (auto& function : _functions)
+		{
+			res += (function.first.str() + "  x¡Ê" + function.second->str() + '\n');
+		}
+		return res;
+	}
+
+	double PiecewiseFunction::value(double x)
+	{
+		for (auto& function : _functions)
+		{
+			if (function.first.contain(x))
+				return function.second->value(x);
+		}
+		throw std::out_of_range("x not in range");
+		return 0;
+	}
+
+	BaseFunctionPtr PiecewiseFunction::derivative()
+	{
+		std::shared_ptr<PiecewiseFunction> res = std::make_shared<PiecewiseFunction>();
+		for (auto& function : _functions)
+			res->add_function({ function.first, function.second->derivative() });
+		return res;
+	}
 	//class defination end
 
 	int get_matching_bracket(const std::string& expr, unsigned int pos)
@@ -572,5 +627,7 @@ namespace fp
 		THROW_PARSE_ERROR;
 		return nullptr;
 	}
+
+
 
 }//namespace fp

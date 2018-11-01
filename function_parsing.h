@@ -28,7 +28,8 @@ namespace fp
 		T_LN_FUNCTION,
 		T_SIN_FUNCTION,
 		T_COS_FUNCTION,
-		T_TAN_FUNCTION
+		T_TAN_FUNCTION,
+		T_PICEWISE_FUNCTION
 	};
 
 	class BaseFunction
@@ -250,11 +251,53 @@ namespace fp
 			set_point(_left, rp);
 		}
 
+		bool contain(double value) const
+		{
+			if (_left.value() < value && _right.value() > value)
+				return true;
+			if (_left.contain() && value == _left.value())
+				return true;
+			if (_right.contain() && value == _right.value())
+				return true;
+			return false;
+		}
+
+		std::string str() const
+		{
+			std::string res;
+			res += (_left.contain() ? '[' : '(');
+			res += std::to_string(_left.value());
+			res += ',';
+			res += std::to_string(_right.value());
+			res += (_right.contain() ? ']' : ')');
+			return res;
+		}
+
+		bool operator<(const Segment& rhs) const
+		{
+			return _left < rhs._left;
+		}
+
+		bool operator>(const Segment& rhs) const
+		{
+			return _left > rhs._left;
+		}
 	};
+
+	using Function = std::pair<Segment, BaseFunctionPtr>;
 
 	class PiecewiseFunction :public BaseFunction
 	{
 	private:
+		std::vector<Function> _functions;
+	public:
+		PiecewiseFunction(std::initializer_list<Function> functions = {});
+		void add_function(Function function);
+		void remove_function(double value);
+
+		virtual std::string str() override;
+		virtual double value(double x) override;
+		virtual BaseFunctionPtr derivative() override;
 	};
 }//namespace fp
 
