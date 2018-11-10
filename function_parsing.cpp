@@ -195,7 +195,7 @@ namespace fp
 	{
 		try
 		{
-			return pow(_lhs->value(x), _rhs->value(x));
+			return std::pow(_lhs->value(x), _rhs->value(x));
 		}
 		catch (...)
 		{
@@ -321,7 +321,7 @@ namespace fp
 	{
 		try
 		{
-			return tan(_arg->value(x));
+			return std::tan(_arg->value(x));
 		}
 		catch (...)
 		{

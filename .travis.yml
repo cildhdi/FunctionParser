@@ -1,0 +1,22 @@
+language: c++
+sudo: required
+complier:
+- gcc
+os:
+- linux
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+      - george-edison55-precise-backports
+    packages:
+      - g++-4.9
+      - cmake-data
+      - cmake
+      - libgtest-dev
+script: 
+  - mkdir build
+  - cd build
+  - cmake ..
+  - make
+  - ./fp_test

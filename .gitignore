@@ -19,3 +19,6 @@ function_parsing.vcxproj.user
 stdafx.cpp
 stdafx.h
 targetver.h
+
+.vscode/
+build/
