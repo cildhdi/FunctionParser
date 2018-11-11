@@ -165,7 +165,7 @@ namespace fp
 
 	double PowerFunction::value(double x)
 	{
-		return pow(_lhs->value(x), _rhs->value(x));
+		return std::pow(_lhs->value(x), _rhs->value(x));
 	}
 
 	BaseFunctionPtr PowerFunction::derivative()
@@ -282,12 +282,17 @@ namespace fp
 		});
 	}
 
+	PiecewiseFunctionPtr PiecewiseFunction::make_piecewise_function()
+	{
+		return std::make_shared<PiecewiseFunction>();
+	}
+
 	void PiecewiseFunction::add_function(Function function)
 	{
 		_functions.push_back(function);
 		std::sort(_functions.begin(), _functions.end(), [](const Function& lhs, const Function& rhs)
 		{
-			return lhs.second > rhs.second;
+			return lhs.second < rhs.second;
 		});
 	}
 
@@ -305,7 +310,7 @@ namespace fp
 		std::string res = "\n";
 		for (auto& function : _functions)
 		{
-			res += (function.first.str() + "  x¡Ê" + function.second->str() + '\n');
+			res += (function.second->str() + " ,for x in " + function.first.str() + '\n');
 		}
 		return res;
 	}
