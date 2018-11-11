@@ -402,12 +402,6 @@ TEST(CosFunctionTest, DerivativeTest)
 TEST(PiecewiseFunction, ValueTest)
 {
 	FP_TEST_BEGIN();
-	
-	FP_TEST_END();
-}
-
-int main(int argc, char** argv)
-{
 	auto first = fp::function_parse("-x");
 	auto second = fp::function_parse("x");
 	fp::PiecewiseFunctionPtr f = fp::PiecewiseFunction::make_piecewise_function();
@@ -415,6 +409,11 @@ int main(int argc, char** argv)
 	f->add_function({fp::Segment(0, 10), second});
 	std::cout << f->str();
 	std::cout << f->derivative()->str();
+	FP_TEST_END();
+}
+
+int main(int argc, char** argv)
+{
 	testing::InitGoogleTest(&argc, argv);
 	return RUN_ALL_TESTS();
 }

@@ -14,24 +14,24 @@
 函数：
 
 ```c++
-base_function_ptr function_parse(std::string func_str);
+BaseFunctionPtr function_parse(std::string func_str);
 ```
 
 传入表达式字符串，返回一个基础函数对象指针：
 
 ```c++
-using base_function_ptr = std::shared_ptr<base_function>;
+using BaseFunctionPtr = std::shared_ptr<BaseFunction>;
 ```
 
 基础函数声明：
 
 ```c++
-class base_function
+class BaseFunction
 {
 public:
 	virtual std::string str() = 0;//返回转换后的表达式字符串
 	virtual double value(double x) = 0;//返回自变量为x时表达式的值
-	virtual base_function_ptr derivative() = 0;//返回导函数
+	virtual BaseFunctionPtr derivative() = 0;//返回导函数
 };
 ```
 
