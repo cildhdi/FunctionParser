@@ -15,7 +15,14 @@ addons:
       - g++-4.9
       - cmake-data
       - cmake
-      - googletest
+before_script:
+  - git clone https://github.com/google/googletest.git
+  - cd googletest
+  - cd googletest
+  - mkdir build
+  - cmake ..
+  - make
+  - make install
 script: 
   - mkdir build
   - cd build
