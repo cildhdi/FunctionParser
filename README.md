@@ -1,5 +1,7 @@
 # function_parsing
 
+[![Build Status](https://travis-ci.com/cildhdi/function_parsing.svg?branch=master)](https://travis-ci.com/cildhdi/function_parsing)
+
 提取字符串中的表达式，并能对表达式连续求导
 
 
