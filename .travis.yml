@@ -12,10 +12,12 @@ addons:
       - george-edison55-precise-backports
       - google-cloud
     packages:
-      - g++-4.9
       - cmake-data
       - cmake
 env: CXX_FLAGS=-std=c++11
+install:
+  - sudo apt-get install -qq g++-4.9
+  - export CXX="g++-4.9"
 before_script:
   - git clone https://github.com/google/googletest.git
   - cd googletest
