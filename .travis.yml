@@ -25,9 +25,10 @@ before_script:
   - cd mybuild
   - cmake .. -DCMAKE_CXX_FLAGS=$CXX_FLAGS
   - make
-  - sudo make install
-script: 
+  - cp lib/lib* /usr/lib/
   - cd ..
+  - cp -a include/gtest /usr/include/
+script: 
   - cd ..
   - cd ..
   - mkdir build
