@@ -19,11 +19,15 @@ before_script:
   - git clone https://github.com/google/googletest.git
   - cd googletest
   - cd googletest
-  - mkdir build
+  - mkdir mybuild
+  - cd mybuild
   - cmake ..
   - make
   - sudo make install
 script: 
+  - cd ..
+  - cd ..
+  - cd ..
   - mkdir build
   - cd build
   - cmake ..
