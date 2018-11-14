@@ -9,30 +9,17 @@ addons:
     update: true
     sources:
       - ubuntu-toolchain-r-test
-      - george-edison55-precise-backports
-      - google-cloud
     packages:
       - cmake-data
       - cmake
       - g++-4.9
       - gcc-4.9
-env: CXX_FLAGS=-std=c++11
-before_script:
-  - git clone https://github.com/google/googletest.git
-  - cd googletest
-  - cd googletest
-  - mkdir mybuild
-  - cd mybuild
-  - cmake .. -DCMAKE_CXX_FLAGS=$CXX_FLAGS
-  - make
-  - sudo cp lib/lib* /usr/lib/
-  - cd ..
-  - sudo cp -a include/gtest /usr/include/
-script: 
-  - cd ..
-  - cd ..
+install:
+  - chmod 777 scripts/install_gtest.sh
+  - ./scripts/install_gtest.sh
+script:
   - mkdir build
   - cd build
-  - cmake .. -DCMAKE_CXX_FLAGS=$CXX_FLAGS
+  - cmake ..
   - make
   - ./fp_test
