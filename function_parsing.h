@@ -50,7 +50,7 @@ private:
 	std::string _iv;
 
 public:
-	IndependentVariable(std::string iv);
+	IndependentVariable(const std::string& iv);
 	std::string str() override;
 	double value(double x) override;
 	BaseFunctionPtr derivative() override;

@@ -25,7 +25,7 @@ namespace fp
 	}
 
 	//independent_variable
-	IndependentVariable::IndependentVariable(std::string iv) :_iv(iv), BaseFunction(T_INDEPENDENT_VARIABLE)
+	IndependentVariable::IndependentVariable(const std::string& iv) :_iv(iv), BaseFunction(T_INDEPENDENT_VARIABLE)
 	{
 	}
 
@@ -352,7 +352,7 @@ namespace fp
 		}
 		else if (expr.at(pos) == ')')
 		{
-			for (unsigned int i = pos; pos >= 0; i--)
+			for (int i = pos; i >= 0; i--)
 			{
 				if (expr.at(i) == ')')
 					tag++;
