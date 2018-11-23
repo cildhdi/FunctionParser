@@ -1,4 +1,4 @@
-# function_parsing
+# FunctionParser
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/eeee632c2a044e4fa52ad7d0b86dfcb3)](https://app.codacy.com/app/cildhdi/function_parsing?utm_source=github.com&utm_medium=referral&utm_content=cildhdi/function_parsing&utm_campaign=Badge_Grade_Dashboard)
 [![Build Status](https://travis-ci.com/cildhdi/function_parsing.svg?branch=master)](https://travis-ci.com/cildhdi/function_parsing)
@@ -9,7 +9,8 @@
 ## 支持
 
 - +-*/^
-- ln,sin,cos
+- ln,sin,cos,tan
+- 支持分段函数
 - 可使用括号指定优先级
 
 ## 用法
@@ -17,36 +18,15 @@
 函数：
 
 ```c++
-BaseFunctionPtr function_parse(std::string func_str);
+BaseFunctionPtr FunctionParser::parse(std::string func_str);
 ```
 
-传入表达式字符串，返回一个基础函数对象指针：
+main.cpp:
 
 ```c++
-using BaseFunctionPtr = std::shared_ptr<BaseFunction>;
-```
-
-基础函数声明：
-
-```c++
-class BaseFunction
-{
-public:
-	virtual std::string str() = 0;//返回转换后的表达式字符串
-	virtual double value(double x) = 0;//返回自变量为x时表达式的值
-	virtual BaseFunctionPtr derivative() = 0;//返回导函数
-};
-```
-
-
-
-## 示例
-
-main.cpp  
-
-```c++
-#include "function_parsing.h"
+#include "FunctionParser.h"
 #include <iostream>
+using namespace cl;
 int main()
 {
 	std::string str;
@@ -54,7 +34,8 @@ int main()
 	std::cin >> str;
 	try
 	{
-		auto f = fp::function_parse(str);
+        FunctionParser parser;
+		auto f = parser.parse(str);
 		auto fd = f->derivative();
 		std::cout << "f(x)=" << f->str() << std::endl;
 		std::cout << "f'(x)=" << fd->str() << std::endl;
