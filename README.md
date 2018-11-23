@@ -1,7 +1,6 @@
 # FunctionParser
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/eeee632c2a044e4fa52ad7d0b86dfcb3)](https://app.codacy.com/app/cildhdi/function_parsing?utm_source=github.com&utm_medium=referral&utm_content=cildhdi/function_parsing&utm_campaign=Badge_Grade_Dashboard)
-[![Build Status](https://travis-ci.com/cildhdi/function_parsing.svg?branch=master)](https://travis-ci.com/cildhdi/function_parsing)
+[![Build Status](https://travis-ci.com/cildhdi/FunctionParser.svg?branch=master)](https://travis-ci.com/cildhdi/FunctionParser)
 
 提取字符串中的表达式，并能对表达式连续求导
 
@@ -13,6 +12,12 @@
 - 支持分段函数
 - 可使用括号指定优先级
 
+## 如何build
+### linux
+先安装gtest（不需要测试可以不安装，可直接使用scripts/install_gtest.sh）与cmake，然后直接运行scripts/build.sh，成功后得库文件与测试程序均在build文件夹内。
+### windows
+对gtest与cmake的要求和linux相同，可以使用[vcpkg](https://github.com/Microsoft/vcpkg)来快速安装gtest，然后cmake时指定CMAKE_TOOLCHAIN_FILE的值（安装完vcpkg后会给出vcpkg.cmake文件的路径）。
+
 ## 用法
 
 函数：
@@ -21,7 +26,7 @@
 BaseFunctionPtr FunctionParser::parse(std::string func_str);
 ```
 
-main.cpp:
+示例：
 
 ```c++
 #include "FunctionParser.h"

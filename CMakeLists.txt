@@ -11,6 +11,8 @@ add_library(FunctionParser ${SRC})
 
 #test
 find_package(GTest REQUIRED)
-include_directories(${GTEST_INCLUDE_DIR})
-add_executable(FunctionParserTest test/test.cpp)
-target_link_libraries(FunctionParserTest FunctionParser GTest::GTest)
+if(GTEST_FOUND)
+    include_directories(${GTEST_INCLUDE_DIR})
+    add_executable(FunctionParserTest test/test.cpp)
+    target_link_libraries(FunctionParserTest FunctionParser GTest::GTest)
+endif(GTEST_FOUND)
