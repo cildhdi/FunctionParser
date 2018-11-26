@@ -22,5 +22,5 @@ before_script: chmod 777 scripts/build.sh
 script: 
   - ./scripts/build.sh
   - ./build/FunctionParserTest
-  after_success:
+after_success:
   - coveralls --include src --include include --gcov-options '\-lp' --root . --build-root build
