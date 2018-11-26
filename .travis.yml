@@ -23,4 +23,4 @@ script:
   - ./scripts/build.sh
   - ./build/FunctionParserTest
 after_success:
-  - coveralls --include src --include include --gcov-options '\-lp' --root . --build-root build
+  - coveralls --include src --include include --gcov-options '\-lp' --root . --build-root build/CMakeFiles/FunctionParser.dir/src
