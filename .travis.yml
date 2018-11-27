@@ -16,11 +16,8 @@ addons:
       - gcc-4.9
 before_install: 
   - chmod 777 scripts/install_gtest.sh
-  - pip install --user cpp-coveralls
 install: ./scripts/install_gtest.sh
 before_script: chmod 777 scripts/build.sh
 script: 
   - ./scripts/build.sh
   - ./build/FunctionParserTest
-after_success:
-  - coveralls --include src --include include --gcov-options '\-lp' --root . --build-root build/CMakeFiles/FunctionParser.dir/src
