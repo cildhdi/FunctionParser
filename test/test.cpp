@@ -16,22 +16,22 @@ FileName: test.cpp
 const double MINX = -1000;
 const double MAXX = 1000;
 
-#define FOR_ALL_X							\
+#define FOR_ALL_X \
 	for (double x = MINX; x <= MAXX; x++)
-#define FOR_NEGATIVE_X						\
+#define FOR_NEGATIVE_X \
 	for (double x = MINX; x <= 0; x++)
-#define FOR_POSITIVE_X						\
+#define FOR_POSITIVE_X \
 	for (double x = 0; x <= MAXX; x++)
-#define WITH_MORE_INFO						\
+#define WITH_MORE_INFO \
 	<< "When x equals " << x
-#define FP_TEST_BEGIN()						\
-	try										\
-	{										
-#define FP_TEST_END()						\
-	}										\
-	catch (...)								\
-	{										\
-		ADD_FAILURE();						\
+#define FP_TEST_BEGIN() \
+	try                 \
+	{
+#define FP_TEST_END()  \
+	}                  \
+	catch (...)        \
+	{                  \
+		ADD_FAILURE(); \
 	}
 
 cl::FunctionParser parser;
@@ -42,7 +42,14 @@ TEST(ConstantFunctionTest, ValueTest)
 	FOR_ALL_X
 	{
 		auto f = parser.parse(std::to_string(x));
-		EXPECT_DOUBLE_EQ(f->value(0), x) WITH_MORE_INFO;
+		EXPECT_DOUBLE_EQ(f->value(0), x)
+		WITH_MORE_INFO;
+	}
+	for (double x = -1.0; x < 1.0; x += 0.01)
+	{
+		auto f = parser.parse(std::to_string(x));
+		EXPECT_TRUE(std::fabs(f->value(0) - x) < 1e-13)
+		WITH_MORE_INFO;
 	}
 	FP_TEST_END();
 }
@@ -53,7 +60,8 @@ TEST(ConstantFunctionTest, DerivativeTest)
 	FOR_ALL_X
 	{
 		auto f = parser.parse(std::to_string(x))->derivative();
-		EXPECT_DOUBLE_EQ(f->value(0), 0) WITH_MORE_INFO;
+		EXPECT_DOUBLE_EQ(f->value(0), 0)
+		WITH_MORE_INFO;
 	}
 	FP_TEST_END();
 }
@@ -64,7 +72,8 @@ TEST(IndependentVariableTest, ValueTest)
 	auto f = parser.parse("x");
 	FOR_ALL_X
 	{
-		EXPECT_DOUBLE_EQ(f->value(x), x) WITH_MORE_INFO;
+		EXPECT_DOUBLE_EQ(f->value(x), x)
+		WITH_MORE_INFO;
 	}
 	FP_TEST_END();
 }
@@ -75,7 +84,8 @@ TEST(IndependentVariableTest, DerivativeTest)
 	auto f = parser.parse("x")->derivative();
 	FOR_ALL_X
 	{
-		EXPECT_DOUBLE_EQ(f->value(x), 1) WITH_MORE_INFO;
+		EXPECT_DOUBLE_EQ(f->value(x), 1)
+		WITH_MORE_INFO;
 	}
 	FP_TEST_END();
 }
@@ -89,13 +99,15 @@ TEST(AddFunctionTest, ValueTest)
 	f = parser.parse("x + 3");
 	FOR_ALL_X
 	{
-		EXPECT_DOUBLE_EQ(f->value(x), x + 3) WITH_MORE_INFO;
+		EXPECT_DOUBLE_EQ(f->value(x), x + 3)
+		WITH_MORE_INFO;
 	}
 
 	f = parser.parse("x + x");
 	FOR_ALL_X
 	{
-		EXPECT_DOUBLE_EQ(f->value(x), x + x) WITH_MORE_INFO;
+		EXPECT_DOUBLE_EQ(f->value(x), x + x)
+		WITH_MORE_INFO;
 	}
 	FP_TEST_END();
 }
@@ -109,13 +121,15 @@ TEST(AddFunctionTest, DerivativeTest)
 	f = parser.parse("x + 3")->derivative();
 	FOR_ALL_X
 	{
-		EXPECT_DOUBLE_EQ(f->value(x), 1) WITH_MORE_INFO;
+		EXPECT_DOUBLE_EQ(f->value(x), 1)
+		WITH_MORE_INFO;
 	}
 
 	f = parser.parse("x + x")->derivative();
 	FOR_ALL_X
 	{
-		EXPECT_DOUBLE_EQ(f->value(x), 2) WITH_MORE_INFO;
+		EXPECT_DOUBLE_EQ(f->value(x), 2)
+		WITH_MORE_INFO;
 	}
 	FP_TEST_END();
 }
@@ -129,13 +143,15 @@ TEST(MinusFunctionTest, ValueTest)
 	f = parser.parse("x - 3");
 	FOR_ALL_X
 	{
-		EXPECT_DOUBLE_EQ(f->value(x), x - 3) WITH_MORE_INFO;
+		EXPECT_DOUBLE_EQ(f->value(x), x - 3)
+		WITH_MORE_INFO;
 	}
 
 	f = parser.parse("x - x + 1");
 	FOR_ALL_X
 	{
-		EXPECT_DOUBLE_EQ(f->value(x), 1) WITH_MORE_INFO;
+		EXPECT_DOUBLE_EQ(f->value(x), 1)
+		WITH_MORE_INFO;
 	}
 	FP_TEST_END();
 }
@@ -149,17 +165,20 @@ TEST(MinusFunctionTest, DerivativeTest)
 	f = parser.parse("x - 3")->derivative();
 	FOR_ALL_X
 	{
-		EXPECT_DOUBLE_EQ(f->value(x), 1) WITH_MORE_INFO;
+		EXPECT_DOUBLE_EQ(f->value(x), 1)
+		WITH_MORE_INFO;
 	}
 	f = parser.parse("3 - x")->derivative();
 	FOR_ALL_X
 	{
-		EXPECT_DOUBLE_EQ(f->value(x), -1) WITH_MORE_INFO;
+		EXPECT_DOUBLE_EQ(f->value(x), -1)
+		WITH_MORE_INFO;
 	}
 	f = parser.parse("x - x + 1")->derivative();
 	FOR_ALL_X
 	{
-		EXPECT_DOUBLE_EQ(f->value(x), 0) WITH_MORE_INFO;
+		EXPECT_DOUBLE_EQ(f->value(x), 0)
+		WITH_MORE_INFO;
 	}
 	FP_TEST_END();
 }
@@ -173,13 +192,15 @@ TEST(MultiplyFunctionTest, ValueTest)
 	f = parser.parse("x * 3");
 	FOR_ALL_X
 	{
-		EXPECT_DOUBLE_EQ(f->value(x), x * 3) WITH_MORE_INFO;
+		EXPECT_DOUBLE_EQ(f->value(x), x * 3)
+		WITH_MORE_INFO;
 	}
 
 	f = parser.parse("x * x");
 	FOR_ALL_X
 	{
-		EXPECT_DOUBLE_EQ(f->value(x), x * x) WITH_MORE_INFO;
+		EXPECT_DOUBLE_EQ(f->value(x), x * x)
+		WITH_MORE_INFO;
 	}
 	FP_TEST_END();
 }
@@ -193,13 +214,15 @@ TEST(MultiplyFunctionTest, DerivativeTest)
 	f = parser.parse("x * 3")->derivative();
 	FOR_ALL_X
 	{
-		EXPECT_DOUBLE_EQ(f->value(x), 3) WITH_MORE_INFO;
+		EXPECT_DOUBLE_EQ(f->value(x), 3)
+		WITH_MORE_INFO;
 	}
 
 	f = parser.parse("x * x")->derivative();
 	FOR_ALL_X
 	{
-		EXPECT_DOUBLE_EQ(f->value(x), 2 * x) WITH_MORE_INFO;
+		EXPECT_DOUBLE_EQ(f->value(x), 2 * x)
+		WITH_MORE_INFO;
 	}
 	FP_TEST_END();
 }
@@ -213,23 +236,27 @@ TEST(DivideFunctionTest, ValueTest)
 	f = parser.parse("x / 3");
 	FOR_ALL_X
 	{
-		EXPECT_DOUBLE_EQ(f->value(x), static_cast<double>(x) / 3) WITH_MORE_INFO;
+		EXPECT_DOUBLE_EQ(f->value(x), static_cast<double>(x) / 3)
+		WITH_MORE_INFO;
 	}
 
 	f = parser.parse("3 / x");
 	FOR_ALL_X
 	{
-		if (x) EXPECT_DOUBLE_EQ(f->value(x), static_cast<double>(3) / x) WITH_MORE_INFO;
+		if (x)
+			EXPECT_DOUBLE_EQ(f->value(x), static_cast<double>(3) / x)
+		WITH_MORE_INFO;
 	}
 
 	f = parser.parse("x / x");
 	FOR_ALL_X
 	{
-		if (x) EXPECT_DOUBLE_EQ(f->value(x), static_cast<double>(x) / x) WITH_MORE_INFO;
+		if (x)
+			EXPECT_DOUBLE_EQ(f->value(x), static_cast<double>(x) / x)
+		WITH_MORE_INFO;
 	}
 	FP_TEST_END();
 }
-
 
 TEST(DivideFunctionTest, DerivativeTest)
 {
@@ -240,20 +267,25 @@ TEST(DivideFunctionTest, DerivativeTest)
 	f = parser.parse("x / 3")->derivative();
 	FOR_ALL_X
 	{
-		EXPECT_DOUBLE_EQ(f->value(x), static_cast<double>(1) / 3) WITH_MORE_INFO;
+		EXPECT_DOUBLE_EQ(f->value(x), static_cast<double>(1) / 3)
+		WITH_MORE_INFO;
 	}
 
 	f = parser.parse("3 / x")->derivative();
 	FOR_ALL_X
 	{
 		//http://www.wolframalpha.com/input/?i=d(3%2Fx)%2Fdx
-		if (x) EXPECT_DOUBLE_EQ(f->value(x), -static_cast<double>(3) / (x * x)) WITH_MORE_INFO;
+		if (x)
+			EXPECT_DOUBLE_EQ(f->value(x), -static_cast<double>(3) / (x * x))
+		WITH_MORE_INFO;
 	}
 
 	f = parser.parse("x / x")->derivative();
 	FOR_ALL_X
 	{
-		if (x) EXPECT_DOUBLE_EQ(f->value(x), 0) WITH_MORE_INFO;
+		if (x)
+			EXPECT_DOUBLE_EQ(f->value(x), 0)
+		WITH_MORE_INFO;
 	}
 	FP_TEST_END();
 }
@@ -267,13 +299,16 @@ TEST(PowerFunctionTest, ValueTest)
 	f = parser.parse("x ^ 3");
 	FOR_ALL_X
 	{
-		EXPECT_DOUBLE_EQ(f->value(x), std::pow(x, 3)) WITH_MORE_INFO;
+		EXPECT_DOUBLE_EQ(f->value(x), std::pow(x, 3))
+		WITH_MORE_INFO;
 	}
 
 	f = parser.parse("3 ^ x");
 	FOR_ALL_X
 	{
-		if (x) EXPECT_DOUBLE_EQ(f->value(x), std::pow(3, x)) WITH_MORE_INFO;
+		if (x)
+			EXPECT_DOUBLE_EQ(f->value(x), std::pow(3, x))
+		WITH_MORE_INFO;
 	}
 	FP_TEST_END();
 }
@@ -288,14 +323,17 @@ TEST(PowerFunctionTest, DerivativeTest)
 	FOR_ALL_X
 	{
 		//http://www.wolframalpha.com/input/?i=d(x+%5E+3)%2Fdx
-		EXPECT_DOUBLE_EQ(f->value(x), 3 * std::pow(x, 2)) WITH_MORE_INFO;
+		EXPECT_DOUBLE_EQ(f->value(x), 3 * std::pow(x, 2))
+		WITH_MORE_INFO;
 	}
 
 	f = parser.parse("3 ^ x")->derivative();
 	FOR_ALL_X
 	{
 		//http://www.wolframalpha.com/input/?i=d(3%5Ex)%2Fdx
-		if (x) EXPECT_DOUBLE_EQ(f->value(x), std::pow(3, x) * std::log(3)) WITH_MORE_INFO;
+		if (x)
+			EXPECT_DOUBLE_EQ(f->value(x), std::pow(3, x) * std::log(3))
+		WITH_MORE_INFO;
 	}
 	FP_TEST_END();
 }
@@ -306,12 +344,16 @@ TEST(LnFunctionTest, ValueTest)
 	auto f = parser.parse("ln(x)");
 	FOR_POSITIVE_X
 	{
-		if (x) EXPECT_DOUBLE_EQ(f->value(x), std::log(x)) WITH_MORE_INFO;
+		if (x)
+			EXPECT_DOUBLE_EQ(f->value(x), std::log(x))
+		WITH_MORE_INFO;
 	}
 	auto ff = parser.parse("ln(ln(x))");
 	FOR_POSITIVE_X
 	{
-		if (x > 1)EXPECT_DOUBLE_EQ(ff->value(x), std::log(std::log(x))) WITH_MORE_INFO;
+		if (x > 1)
+			EXPECT_DOUBLE_EQ(ff->value(x), std::log(std::log(x)))
+		WITH_MORE_INFO;
 	}
 	FP_TEST_END();
 }
@@ -322,13 +364,17 @@ TEST(LnFunctionTest, DerivativeTest)
 	auto f = parser.parse("ln(x)")->derivative();
 	FOR_POSITIVE_X
 	{
-		if (x) EXPECT_DOUBLE_EQ(f->value(x), static_cast<double>(1) / x) WITH_MORE_INFO;
+		if (x)
+			EXPECT_DOUBLE_EQ(f->value(x), static_cast<double>(1) / x)
+		WITH_MORE_INFO;
 	}
 	auto ff = parser.parse("ln(ln(x))")->derivative();
 	FOR_POSITIVE_X
 	{
 		//http://www.wolframalpha.com/input/?i=d(ln(ln(x)))%2Fdx
-		if (x > 1)EXPECT_DOUBLE_EQ(ff->value(x), static_cast<double>(1) / (x*std::log(x))) WITH_MORE_INFO;
+		if (x > 1)
+			EXPECT_DOUBLE_EQ(ff->value(x), static_cast<double>(1) / (x * std::log(x)))
+		WITH_MORE_INFO;
 	}
 	FP_TEST_END();
 }
@@ -339,12 +385,14 @@ TEST(SinFunctionTest, ValueTest)
 	auto f = parser.parse("sin(x)");
 	FOR_ALL_X
 	{
-		EXPECT_DOUBLE_EQ(f->value(x), std::sin(x)) WITH_MORE_INFO;
+		EXPECT_DOUBLE_EQ(f->value(x), std::sin(x))
+		WITH_MORE_INFO;
 	}
 	auto ff = parser.parse("sin(sin(x))");
 	FOR_ALL_X
 	{
-		EXPECT_DOUBLE_EQ(ff->value(x), std::sin(std::sin(x))) WITH_MORE_INFO;
+		EXPECT_DOUBLE_EQ(ff->value(x), std::sin(std::sin(x)))
+		WITH_MORE_INFO;
 	}
 	FP_TEST_END();
 }
@@ -355,13 +403,15 @@ TEST(SinFunctionTest, DerivativeTest)
 	auto f = parser.parse("sin(x)")->derivative();
 	FOR_ALL_X
 	{
-		EXPECT_DOUBLE_EQ(f->value(x), std::cos(x)) WITH_MORE_INFO;
+		EXPECT_DOUBLE_EQ(f->value(x), std::cos(x))
+		WITH_MORE_INFO;
 	}
 	auto ff = parser.parse("sin(sin(x))")->derivative();
 	FOR_ALL_X
 	{
 		//http://www.wolframalpha.com/input/?i=d(sin(sin(x)))%2Fdx
-		EXPECT_DOUBLE_EQ(ff->value(x), std::cos(x) * std::cos(std::sin(x))) WITH_MORE_INFO;
+		EXPECT_DOUBLE_EQ(ff->value(x), std::cos(x) * std::cos(std::sin(x)))
+		WITH_MORE_INFO;
 	}
 	FP_TEST_END();
 }
@@ -372,12 +422,14 @@ TEST(CosFunctionTest, ValueTest)
 	auto f = parser.parse("cos(x)");
 	FOR_ALL_X
 	{
-		EXPECT_DOUBLE_EQ(f->value(x), std::cos(x)) WITH_MORE_INFO;
+		EXPECT_DOUBLE_EQ(f->value(x), std::cos(x))
+		WITH_MORE_INFO;
 	}
 	auto ff = parser.parse("cos(cos(x))");
 	FOR_ALL_X
 	{
-		EXPECT_DOUBLE_EQ(ff->value(x), std::cos(std::cos(x))) WITH_MORE_INFO;
+		EXPECT_DOUBLE_EQ(ff->value(x), std::cos(std::cos(x)))
+		WITH_MORE_INFO;
 	}
 	FP_TEST_END();
 }
@@ -388,13 +440,15 @@ TEST(CosFunctionTest, DerivativeTest)
 	auto f = parser.parse("cos(x)")->derivative();
 	FOR_ALL_X
 	{
-		EXPECT_DOUBLE_EQ(f->value(x), -std::sin(x)) WITH_MORE_INFO;
+		EXPECT_DOUBLE_EQ(f->value(x), -std::sin(x))
+		WITH_MORE_INFO;
 	}
 	auto ff = parser.parse("cos(cos(x))")->derivative();
 	FOR_ALL_X
 	{
 		//http://www.wolframalpha.com/input/?i=d(cos(cos(x)))%2Fdx
-		EXPECT_DOUBLE_EQ(ff->value(x), std::sin(x) * std::sin(std::cos(x))) WITH_MORE_INFO;
+		EXPECT_DOUBLE_EQ(ff->value(x), std::sin(x) * std::sin(std::cos(x)))
+		WITH_MORE_INFO;
 	}
 	FP_TEST_END();
 }
@@ -412,7 +466,7 @@ TEST(PiecewiseFunction, ValueTest)
 	FP_TEST_END();
 }
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
 	testing::InitGoogleTest(&argc, argv);
 	return RUN_ALL_TESTS();

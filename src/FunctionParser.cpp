@@ -5,7 +5,7 @@ namespace cl
 
 namespace detail
 {
-int get_matching_bracket(const std::string &expr, unsigned int pos)
+int get_matching_bracket(std::string_view expr, unsigned int pos)
 {
     unsigned int tag = 0;
     if (expr.at(pos) == '(')
@@ -40,7 +40,7 @@ bool is_add_or_minus(char c)
     return c == '+' || c == '-';
 }
 
-bool include_operators(const std::string &str)
+bool include_operators(std::string_view str)
 {
     for (auto c : str)
     {
@@ -52,7 +52,7 @@ bool include_operators(const std::string &str)
     return false;
 }
 
-bool include_brackets(const std::string &str)
+bool include_brackets(std::string_view str)
 {
     for (auto c : str)
     {
@@ -64,7 +64,7 @@ bool include_brackets(const std::string &str)
     return false;
 }
 
-bool is_number(const std::string &str)
+bool is_number(std::string_view str)
 {
     for (auto c : str)
     {
@@ -88,15 +88,24 @@ bool is_power(char c)
 
 } // namespace detail
 
-BaseFunctionPtr FunctionParser::parse(std::string func_str)
+BaseFunctionPtr FunctionParser::parse(std::string_view func_str)
 {
-    func_str.erase(std::remove_if(func_str.begin(), func_str.end(),
+    std::string copy;
+    //check if this str has spaces
+    if (func_str.find(' ') != func_str.npos)
+    {
+        copy = std::string(func_str.data(), func_str.size());
+        copy.erase(std::remove_if(copy.begin(), copy.end(),
                                   [](char c) { return c == ' '; }),
-                   func_str.end());
+                   copy.end());
+        copy.shrink_to_fit();
+        func_str = std::string_view(&copy[0], copy.size());
+    }
+
     while ((!func_str.empty()) && func_str.at(0) == '(' && detail::get_matching_bracket(func_str, 0) == (func_str.size() - 1))
     {
-        func_str.erase(func_str.begin());
-        func_str.pop_back();
+        func_str.remove_prefix(1);
+        func_str.remove_suffix(1);
     }
     if (func_str.empty())
     {
@@ -136,11 +145,12 @@ BaseFunctionPtr FunctionParser::parse(std::string func_str)
     {
         if (detail::is_number(func_str))
         {
-            return std::make_shared<ConstantFunction>(std::atof(func_str.c_str()));
+            char *str_end = const_cast<char *>(func_str.data() + func_str.size());
+            return std::make_shared<ConstantFunction>(std::strtod(func_str.data(), &str_end));
         }
         else
         {
-            return std::make_shared<IndependentVariable>(func_str);
+            return std::make_shared<IndependentVariable>(std::string(func_str.data(), func_str.size()));
         }
     }
 

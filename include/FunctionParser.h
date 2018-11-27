@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string_view>
+
 #include <IndependentVariable.h>
 #include <ConstantFunction.h>
 #include <AddFunction.h>
@@ -19,8 +21,8 @@ namespace cl
 
 class FunctionParser
 {
-  public:
-    BaseFunctionPtr parse(std::string func_str);
+public:
+  BaseFunctionPtr parse(std::string_view func_str);
 };
 
 } // namespace cl
