@@ -1,5 +1,6 @@
 # FunctionParser
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9722486638f44202ae5eb7b60a73dbf2)](https://app.codacy.com/app/cildhdi/FunctionParser?utm_source=github.com&utm_medium=referral&utm_content=cildhdi/FunctionParser&utm_campaign=Badge_Grade_Dashboard)
 [![Build Status](https://travis-ci.com/cildhdi/FunctionParser.svg?branch=master)](https://travis-ci.com/cildhdi/FunctionParser)
 
 提取字符串中的表达式，并能对表达式连续求导
