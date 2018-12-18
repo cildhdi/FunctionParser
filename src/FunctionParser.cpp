@@ -5,7 +5,7 @@ namespace cl
 
 namespace detail
 {
-int get_matching_bracket(std::string_view expr, unsigned int pos)
+int get_matching_bracket(expression_string expr, unsigned int pos)
 {
     unsigned int tag = 0;
     if (expr.at(pos) == '(')
@@ -40,7 +40,7 @@ bool is_add_or_minus(char c)
     return c == '+' || c == '-';
 }
 
-bool include_operators(std::string_view str)
+bool include_operators(expression_string str)
 {
     for (auto c : str)
     {
@@ -52,7 +52,7 @@ bool include_operators(std::string_view str)
     return false;
 }
 
-bool include_brackets(std::string_view str)
+bool include_brackets(expression_string str)
 {
     for (auto c : str)
     {
@@ -64,7 +64,7 @@ bool include_brackets(std::string_view str)
     return false;
 }
 
-bool is_number(std::string_view str)
+bool is_number(expression_string str)
 {
     for (auto c : str)
     {
@@ -88,9 +88,10 @@ bool is_power(char c)
 
 } // namespace detail
 
-BaseFunctionPtr FunctionParser::parse(std::string_view func_str)
+BaseFunctionPtr FunctionParser::parse(expression_string func_str)
 {
     std::string copy;
+#if use_string_view
     //check if this str has spaces
     if (func_str.find(' ') != func_str.npos)
     {
@@ -107,6 +108,16 @@ BaseFunctionPtr FunctionParser::parse(std::string_view func_str)
         func_str.remove_prefix(1);
         func_str.remove_suffix(1);
     }
+#else
+    func_str.erase(std::remove_if(func_str.begin(), func_str.end(),
+                                  [](char c) { return c == ' '; }),
+                   func_str.end());
+    while ((!func_str.empty()) && func_str.at(0) == '(' && detail::get_matching_bracket(func_str, 0) == (func_str.size() - 1))
+    {
+        func_str.erase(func_str.begin());
+        func_str.pop_back();
+    }
+#endif
     if (func_str.empty())
     {
         return std::make_shared<ConstantFunction>(0);

@@ -468,6 +468,7 @@ TEST(PiecewiseFunction, ValueTest)
 
 int main(int argc, char **argv)
 {
+	std::cout << "use " << (use_string_view ? (experimental_string_view ? "std::experimental::string_view" : "std::string_view") : "std::string") << std::endl;
 	testing::InitGoogleTest(&argc, argv);
 	return RUN_ALL_TESTS();
 }

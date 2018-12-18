@@ -1,6 +1,29 @@
 #pragma once
 
+#if __has_include(<string_view>)
 #include <string_view>
+#define use_string_view 1
+#define experimental_string_view 0
+namespace cl
+{
+using expression_string = std::string_view;
+}
+
+#elif __has_include(<experimental/string_view>)
+#include <experimental/string_view>
+#define use_string_view 1
+#define experimental_string_view 1
+namespace cl
+{
+using expression_string = std::experimental::string_view;
+}
+#else
+#define use_string_view 0
+namespace cl
+{
+using expression_string = std::string;
+}
+#endif
 
 #include <IndependentVariable.h>
 #include <ConstantFunction.h>
@@ -22,7 +45,7 @@ namespace cl
 class FunctionParser
 {
 public:
-  BaseFunctionPtr parse(std::string_view func_str);
+  BaseFunctionPtr parse(expression_string func_str);
 };
 
 } // namespace cl
