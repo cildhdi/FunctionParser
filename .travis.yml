@@ -18,6 +18,4 @@ before_install:
   - chmod 777 scripts/install_gtest.sh
 install: ./scripts/install_gtest.sh
 before_script: chmod 777 scripts/build.sh
-script: 
-  - ./scripts/build.sh
-  - ./build/FunctionParserTest
+script: ./scripts/build.sh
