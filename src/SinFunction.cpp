@@ -9,17 +9,17 @@ SinFunction::SinFunction(BaseFunctionPtr arg) : _arg(arg), BaseFunction(T_SIN_FU
 {
 }
 
-std::string SinFunction::str()
+std::string SinFunction::str() const
 {
     return "(sin" + _arg->str() + ")";
 }
 
-double SinFunction::value(double x)
+double SinFunction::value(double x) const
 {
     return std::sin(_arg->value(x));
 }
 
-BaseFunctionPtr SinFunction::derivative()
+BaseFunctionPtr SinFunction::derivative() const
 {
     return std::make_shared<MultiplyFunction>(std::make_shared<CosFunction>(_arg), _arg->derivative());
 }

@@ -21,10 +21,10 @@ DEC_SHARED_PTR_TYPE(BaseFunction);
 class BaseFunction
 {
   public:
-    virtual std::string str() = 0;
-    virtual double value(double x) = 0;
-    virtual BaseFunctionPtr derivative() = 0;
-    virtual BaseFunctionPtr derivative(unsigned int n);
+    virtual std::string str() const = 0;
+    virtual double value(double x) const = 0;
+    virtual BaseFunctionPtr derivative() const = 0;
+    virtual BaseFunctionPtr derivative(unsigned int n) const;
     const FunctionType _type;
     BaseFunction(FunctionType type) : _type(type) {}
 };

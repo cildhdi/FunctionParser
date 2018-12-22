@@ -14,8 +14,8 @@ class CosFunction : public BaseFunction
 
   public:
     CosFunction(BaseFunctionPtr arg);
-    std::string str() override;
-    double value(double x) override;
-    BaseFunctionPtr derivative() override;
+    std::string str() const override;
+    double value(double x) const override;
+    BaseFunctionPtr derivative() const override;
 };
 } // namespace cl

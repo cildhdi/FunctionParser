@@ -8,17 +8,17 @@ MultiplyFunction::MultiplyFunction(BaseFunctionPtr lhs, BaseFunctionPtr rhs) : _
 {
 }
 
-std::string MultiplyFunction::str()
+std::string MultiplyFunction::str() const
 {
     return "(" + _lhs->str() + "*" + _rhs->str() + ")";
 }
 
-double MultiplyFunction::value(double x)
+double MultiplyFunction::value(double x) const
 {
     return _lhs->value(x) * _rhs->value(x);
 }
 
-BaseFunctionPtr MultiplyFunction::derivative()
+BaseFunctionPtr MultiplyFunction::derivative() const
 {
     return std::make_shared<AddFunction>(std::make_shared<MultiplyFunction>(_lhs->derivative(), _rhs), std::make_shared<MultiplyFunction>(_lhs, _rhs->derivative()));
 }

@@ -14,8 +14,8 @@ class ConstantFunction : public BaseFunction
 
   public:
     ConstantFunction(double c);
-    std::string str() override;
-    double value(double x) override;
-    BaseFunctionPtr derivative() override;
+    std::string str() const override;
+    double value(double x) const override;
+    BaseFunctionPtr derivative() const override;
 };
 } // namespace cl

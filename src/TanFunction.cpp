@@ -11,17 +11,17 @@ TanFunction::TanFunction(BaseFunctionPtr arg) : _arg(arg), BaseFunction(T_TAN_FU
 {
 }
 
-std::string TanFunction::str()
+std::string TanFunction::str() const
 {
     return "(tan" + _arg->str() + ")";
 }
 
-double TanFunction::value(double x)
+double TanFunction::value(double x) const
 {
     return tan(_arg->value(x));
 }
 
-BaseFunctionPtr TanFunction::derivative()
+BaseFunctionPtr TanFunction::derivative() const
 {
     return std::make_shared<MultiplyFunction>(std::make_shared<DivideFunction>(std::make_shared<ConstantFunction>(1),
                                                                                std::make_shared<PowerFunction>(_arg, std::make_shared<ConstantFunction>(2))),

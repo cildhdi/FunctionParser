@@ -7,7 +7,7 @@ ConstantFunction::ConstantFunction(double c) : _c(c), BaseFunction(T_CONSTANT_FU
 {
 }
 
-std::string ConstantFunction::str()
+std::string ConstantFunction::str() const
 {
     auto str = std::to_string(_c);
     while ((!str.empty()) && str.at(str.size() - 1) == '0')
@@ -21,12 +21,12 @@ std::string ConstantFunction::str()
     return str;
 }
 
-double ConstantFunction::value(double x)
+double ConstantFunction::value(double x) const
 {
     return _c;
 }
 
-BaseFunctionPtr ConstantFunction::derivative()
+BaseFunctionPtr ConstantFunction::derivative() const
 {
     return std::make_shared<ConstantFunction>(0);
 }

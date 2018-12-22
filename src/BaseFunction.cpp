@@ -3,7 +3,7 @@
 namespace cl
 {
 
-BaseFunctionPtr BaseFunction::derivative(unsigned int n)
+BaseFunctionPtr BaseFunction::derivative(unsigned int n) const
 {
     if (n == 0)
         return nullptr;

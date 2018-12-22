@@ -10,17 +10,17 @@ PowerFunction::PowerFunction(BaseFunctionPtr lhs, BaseFunctionPtr rhs) : _lhs(lh
 {
 }
 
-std::string PowerFunction::str()
+std::string PowerFunction::str() const
 {
     return "(" + _lhs->str() + "^" + _rhs->str() + ")";
 }
 
-double PowerFunction::value(double x)
+double PowerFunction::value(double x) const
 {
     return std::pow(_lhs->value(x), _rhs->value(x));
 }
 
-BaseFunctionPtr PowerFunction::derivative()
+BaseFunctionPtr PowerFunction::derivative() const
 {
     if (_rhs->_type == T_CONSTANT_FUNCTION)
     {

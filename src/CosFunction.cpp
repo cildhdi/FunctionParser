@@ -10,17 +10,17 @@ CosFunction::CosFunction(BaseFunctionPtr arg) : _arg(arg), BaseFunction(T_COS_FU
 {
 }
 
-std::string CosFunction::str()
+std::string CosFunction::str() const
 {
     return "(cos" + _arg->str() + ")";
 }
 
-double CosFunction::value(double x)
+double CosFunction::value(double x) const
 {
     return std::cos(_arg->value(x));
 }
 
-BaseFunctionPtr CosFunction::derivative()
+BaseFunctionPtr CosFunction::derivative() const
 {
     return std::make_shared<MultiplyFunction>(std::make_shared<ConstantFunction>(-1), std::make_shared<MultiplyFunction>(std::make_shared<SinFunction>(_arg), _arg->derivative()));
 }

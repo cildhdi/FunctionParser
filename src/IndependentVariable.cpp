@@ -8,17 +8,17 @@ IndependentVariable::IndependentVariable(const std::string &iv) : _iv(iv), BaseF
 {
 }
 
-std::string IndependentVariable::str()
+std::string IndependentVariable::str() const
 {
     return _iv;
 }
 
-double IndependentVariable::value(double x)
+double IndependentVariable::value(double x) const
 {
     return x;
 }
 
-BaseFunctionPtr IndependentVariable::derivative()
+BaseFunctionPtr IndependentVariable::derivative() const
 {
     return std::make_shared<ConstantFunction>(1);
 }

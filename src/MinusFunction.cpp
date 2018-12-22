@@ -7,17 +7,17 @@ MinusFunction::MinusFunction(BaseFunctionPtr lhs, BaseFunctionPtr rhs) : _lhs(lh
 {
 }
 
-std::string MinusFunction::str()
+std::string MinusFunction::str() const
 {
     return "(" + _lhs->str() + "-" + _rhs->str() + ")";
 }
 
-double MinusFunction::value(double x)
+double MinusFunction::value(double x) const
 {
     return _lhs->value(x) - _rhs->value(x);
 }
 
-BaseFunctionPtr MinusFunction::derivative()
+BaseFunctionPtr MinusFunction::derivative() const
 {
     return std::make_shared<MinusFunction>(_lhs->derivative(), _rhs->derivative());
 }

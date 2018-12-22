@@ -21,9 +21,9 @@ class PiecewiseFunction : public BaseFunction
     void add_function(Function function);
     void remove_function(double value);
 
-    virtual std::string str() override;
-    virtual double value(double x) override;
-    virtual BaseFunctionPtr derivative() override;
+    virtual std::string str() const override;
+    virtual double value(double x) const override;
+    virtual BaseFunctionPtr derivative() const override;
 };
 
 } // namespace cl

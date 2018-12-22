@@ -32,7 +32,7 @@ void PiecewiseFunction::remove_function(double value)
                      _functions.end());
 }
 
-std::string PiecewiseFunction::str()
+std::string PiecewiseFunction::str() const
 {
     if (_functions.empty())
         return "";
@@ -44,7 +44,7 @@ std::string PiecewiseFunction::str()
     return res;
 }
 
-double PiecewiseFunction::value(double x)
+double PiecewiseFunction::value(double x) const
 {
     for (auto &function : _functions)
     {
@@ -55,7 +55,7 @@ double PiecewiseFunction::value(double x)
     return 0;
 }
 
-BaseFunctionPtr PiecewiseFunction::derivative()
+BaseFunctionPtr PiecewiseFunction::derivative() const
 {
     std::shared_ptr<PiecewiseFunction> res = std::make_shared<PiecewiseFunction>();
     for (auto &function : _functions)
